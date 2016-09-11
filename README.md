@@ -1,5 +1,7 @@
 # docker-phpcs-drupal
 
+[![](https://images.microbadger.com/badges/version/skilldlabs/docker-phpcs-drupal.svg)](http://microbadger.com/images/skilldlabs/docker-phpcs-drupal "Get your own version badge on microbadger.com")
+
 ## How to use
 Go to needed directory with code
 ```
