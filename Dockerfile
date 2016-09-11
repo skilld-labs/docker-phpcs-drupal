@@ -3,15 +3,14 @@ FROM alpine:edge
 MAINTAINER Andriy Yun <andriy.yun@gmail.com>
 MAINTAINER Andy Postnikov <apostnikov@gmail.com>
 
-RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-  && apk add --no-cache \
-  php7@testing \
-  php7-xml@testing \
-  php7-phar@testing \
-  php7-openssl@testing \
-  php7-mbstring@testing \
-  php7-json@testing \
-  php7-ctype@testing \
+RUN apk add --no-cache \
+  php7 \
+  php7-xml \
+  php7-phar \
+  php7-openssl \
+  php7-mbstring \
+  php7-json \
+  php7-ctype \
   curl \
   patch \
   && ln -s /usr/bin/php7 /usr/bin/php \
