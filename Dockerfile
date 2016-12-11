@@ -5,12 +5,15 @@ MAINTAINER Andy Postnikov <apostnikov@gmail.com>
 
 RUN apk add --no-cache \
   php7 \
-  php7-xml \
-  php7-phar \
-  php7-openssl \
-  php7-mbstring \
-  php7-json \
+  php7-apcu \
   php7-ctype \
+  php7-json \
+  php7-mbstring \
+  php7-opcache \
+  php7-openssl \
+  php7-phar \
+  php7-xml \
+  php7-zlib \
   curl \
   patch \
   && ln -s /usr/bin/php7 /usr/bin/php \
