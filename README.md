@@ -17,6 +17,11 @@ To call phpcbf you need to override default command
 docker run --rm -v $(pwd):/work skilldlabs/docker-phpcs-drupal phpcbf --standard=Drupal .
 ```
 
+To call DrupalSecure check (https://www.drupal.org/sandbox/coltrane/1921926)
+```
+docker run --rm -v $(pwd):/work skilldlabs/docker-phpcs-drupal phpcs --standard=DrupalSecure .
+```
+
 ## Shortening of container name
 
 ```
