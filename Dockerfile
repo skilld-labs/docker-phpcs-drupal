@@ -1,7 +1,15 @@
-FROM alpine:edge
+FROM alpine:3.5
 
-MAINTAINER Andriy Yun <andriy.yun@gmail.com>
-MAINTAINER Andy Postnikov <apostnikov@gmail.com>
+ARG BUILD_DATE
+ARG VCS_REF
+
+LABEL org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.schema-version="1.0" \
+  org.label-schema.name="docker-phpcs-drupal" \
+  org.label-schema.description="PHP codesniffer for Drupal - phpcs & phpcbf" \
+  org.label-schema.vcs-url="https://github.com/skilld-labs/docker-phpcs-drupal" \
+  maintainer="Andriy Yun <andriy.yun@gmail.com>, Andy Postnikov <apostnikov@gmail.com>"
 
 RUN apk add --no-cache \
   php7 \
@@ -15,7 +23,6 @@ RUN apk add --no-cache \
   php7-xml \
   php7-zlib \
   curl \
-  patch \
   git \
   && ln -s /usr/bin/php7 /usr/bin/php \
   && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
