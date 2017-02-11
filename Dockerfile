@@ -12,6 +12,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
   maintainer="Andriy Yun <andriy.yun@gmail.com>, Andy Postnikov <apostnikov@gmail.com>"
 
 RUN apk add --no-cache \
+  curl \
+  git \
+  patch \
   php7 \
   php7-apcu \
   php7-ctype \
@@ -22,8 +25,6 @@ RUN apk add --no-cache \
   php7-phar \
   php7-xml \
   php7-zlib \
-  curl \
-  git \
   && ln -s /usr/bin/php7 /usr/bin/php \
   && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
   && composer global require drupal/coder \
@@ -34,6 +35,7 @@ RUN apk add --no-cache \
   && git clone --branch master https://git.drupal.org/sandbox/coltrane/1921926.git /root/drupalsecure_code_sniffs \
   && cd /root/drupalsecure_code_sniffs && curl https://www.drupal.org/files/issues/parenthesis_closer_notice-2320623-2.patch | git apply && cd \
   && apk del --no-cache git \
+  && rm -rf /root/.composer/cache/* \
   && ln -s /root/drupalsecure_code_sniffs/DrupalSecure /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/DrupalSecure
 
 VOLUME /work
