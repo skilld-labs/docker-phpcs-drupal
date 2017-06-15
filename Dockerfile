@@ -37,7 +37,8 @@ RUN apk add --no-cache \
   && cd /root/drupalsecure_code_sniffs && curl https://www.drupal.org/files/issues/parenthesis_closer_notice-2320623-2.patch | git apply && cd \
   && apk del --no-cache git \
   && rm -rf /root/.composer/cache/* \
-  && ln -s /root/drupalsecure_code_sniffs/DrupalSecure /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/DrupalSecure
+  && ln -s /root/drupalsecure_code_sniffs/DrupalSecure /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/DrupalSecure \
+  sed -i "s/.*memory_limit = .*/memory_limit = -1/" /etc/php7/php.ini
 
 VOLUME /work
 WORKDIR /work
