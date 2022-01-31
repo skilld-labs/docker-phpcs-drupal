@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.15
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -16,32 +16,35 @@ RUN set -e \
   curl \
   git \
   patch \
-  php7 \
-  php7-apcu \
-  php7-ctype \
-  php7-json \
-  php7-mbstring \
-  php7-opcache \
-  php7-openssl \
-  php7-phar \
-  php7-simplexml \
-  php7-tokenizer \
-  php7-xmlwriter \
-  php7-zlib \
-  && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
-  && composer global require drupal/coder --update-no-dev --no-suggest --prefer-dist ^8.2 \
+  php8 \
+  php8-pecl-apcu \
+  php8-ctype \
+  php8-mbstring \
+  php8-opcache \
+  php8-openssl \
+  php8-phar \
+  php8-simplexml \
+  php8-tokenizer \
+  php8-xmlwriter;
+
+RUN ln -s $(which php8) /usr/local/bin/php;
+
+RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
+  # Require Drupal coder module to have phpcs. \
+  # https://www.drupal.org/project/coder
+  && composer global require drupal/coder --update-no-dev --prefer-dist ^8.3 \
+  # Copy phpcs and phpcbf files into the binaries directory.
   && ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
   && ln -s /root/.composer/vendor/bin/phpcbf /usr/bin/phpcbf \
-  && ln -s /root/.composer/vendor/drupal/coder/coder_sniffer/Drupal /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Drupal \
-  && ln -s /root/.composer/vendor/drupal/coder/coder_sniffer/DrupalPractice /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/DrupalPractice \
-  && cd /root/.composer/vendor/drupal/coder && curl https://www.drupal.org/files/issues/2857856-8.patch | patch -p1 && cd \
-  && git clone --branch master https://git.drupal.org/sandbox/coltrane/1921926.git /root/drupalsecure_code_sniffs \
-  && rm -rf /root/drupalsecure_code_sniffs/.git \
-  && cd /root/drupalsecure_code_sniffs && curl https://www.drupal.org/files/issues/parenthesis_closer_notice-2320623-2.patch | git apply && cd \
+  # Clone coder sniffs into the codesniffer sniffs directory.
+  && ln -s /root/.composer/vendor/drupal/coder/coder_sniffer/Drupal /root/.composer/vendor/squizlabs/php_codesniffer/src/Standards/Drupal \
+  && ln -s /root/.composer/vendor/drupal/coder/coder_sniffer/DrupalPractice /root/.composer/vendor/squizlabs/php_codesniffer/src/Standards/DrupalPractice \
+  # Removing packages which needed only during the installation.
   && apk del --no-cache git \
+  # Clear composer cache - it will just take space.
   && rm -rf /root/.composer/cache/* \
-  && ln -s /root/drupalsecure_code_sniffs/DrupalSecure /root/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/DrupalSecure \
-  && sed -i "s/.*memory_limit = .*/memory_limit = -1/" /etc/php7/php.ini
+  # Sniffs could take much time, we will set unlimited time for PHP execution
+  && sed -i "s/.*memory_limit = .*/memory_limit = -1/" /etc/php8/php.ini
 
 VOLUME /work
 WORKDIR /work
