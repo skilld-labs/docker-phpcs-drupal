@@ -29,11 +29,10 @@ RUN set -e \
   ${PHP}-tokenizer \
   ${PHP}-xmlwriter \
   ${PHP}-zip \
-  && rm -fr /var/cache/apk/* \
   && ln -fs $(which ${PHP}) /usr/bin/php \
   && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
   && composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true \
-  && composer global require drupal/coder -o --apcu-autoloader --update-no-dev --no-suggest --prefer-dist ^8.3 \
+  && composer global require drupal/coder ^8.3 -o --apcu-autoloader --update-no-dev --prefer-dist \
   && ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
   && ln -s /root/.composer/vendor/bin/phpcbf /usr/bin/phpcbf \
   # Link coder sniffs into the codesniffer sniffs directory.
@@ -41,6 +40,7 @@ RUN set -e \
   && ln -s /root/.composer/vendor/drupal/coder/coder_sniffer/DrupalPractice /root/.composer/vendor/squizlabs/php_codesniffer/src/Standards/DrupalPractice \
   # Removing packages which needed only during the installation.
   && apk del --no-network --purge git \
+  && rm -fr /var/cache/apk/* \
   # Clear composer cache - it will just take space.
   && rm -rf /root/.composer/cache/* \
   # Sniffs could take memory, set unlimited to be customized by end-user

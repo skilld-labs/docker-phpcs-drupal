@@ -11,7 +11,7 @@ build:
 	@echo "Building images for tags: $(TAGS)"
 	set -e; for i in $(TAGS); do printf "\nBuilding $(NAME):$$i \n\n"; cd drupal$$i; \
 		DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) docker build -t $(NAME):$$i \
-		--no-cache --progress=plain \
+		--pull --no-cache --progress=plain \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` .; \
 		cd ..; done
