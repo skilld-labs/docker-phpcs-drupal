@@ -33,6 +33,8 @@ RUN set -e \
   && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin \
   && composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true \
   && composer global require drupal/coder ^8.3 -o --apcu-autoloader --update-no-dev --prefer-dist \
+# patch for PHP 8.4
+  && curl -sSL https://git.drupalcode.org/issue/coder-3471146/-/commit/87d4ba05793f136b76e289f65fe6d8dbbe334c2e.diff | patch -p1 -d /root/.composer/vendor/drupal/coder/ \
   && ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
   && ln -s /root/.composer/vendor/bin/phpcbf /usr/bin/phpcbf \
   # Link coder sniffs into the codesniffer sniffs directory.
